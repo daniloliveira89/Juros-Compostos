@@ -1,0 +1,1 @@
+Abra index.html. Para publicar no GitHub Pages envie os 3 arquivos.
