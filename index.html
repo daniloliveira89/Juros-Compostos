@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Juros Compostos Global</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+</head>
+<body>
+
+    <!-- Cabeçalho Superior Compacto -->
+    <header class="top-bar">
+        <div class="currency-switcher">
+            <label id="lbl-curr" for="currency">Moeda</label>
+            <select id="currency">
+                <option value="BRL" selected>BRL (R$)</option>
+                <option value="USD">USD ($)</option>
+                <option value="EUR">EUR (€)</option>
+            </select>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        
+        <!-- Painel Lateral de Entradas -->
+        <aside class="card sidebar">
+            <h2 id="title-sim">Simulador</h2>
+
+            <div class="input-group">
+                <label id="lbl-pv" for="pv">Valor inicial (PV)</label>
+                <input id="pv" type="number" value="0">
+            </div>
+            <div class="input-group">
+                <label id="lbl-pmt" for="pmt">Aporte mensal (PMT)</label>
+                <input id="pmt" type="number" value="800">
+            </div>
+            <div class="input-group">
+                <label id="lbl-r" for="r">Juros (% a.a.)</label>
+                <input id="r" type="number" step="0.1" value="12">
+            </div>
+            <div class="input-group">
+                <label id="lbl-n" for="n">Período (anos)</label>
+                <input id="n" type="number" value="8">
+            </div>
+
+            <!-- Toggles de Visibilidade das Linhas e Observação -->
+            <div class="toggle-group">
+                <label class="checkbox-label">
+                    <input id="check-gold" type="checkbox" checked>
+                    <span id="lbl-check-gold">Exibir Ouro</span>
+                </label>
+                <label class="checkbox-label">
+                    <input id="check-btc" type="checkbox" checked>
+                    <span id="lbl-check-btc">Exibir Bitcoin</span>
+                </label>
+                <!-- Observação Discreta -->
+                <div id="obs-text" class="obs-note"></div>
+            </div>
+        </aside>
+
+        <!-- Área Principal de Resultados -->
+        <main class="main-content">
+            
+            <!-- Bloco da Fórmula Matemática Dinâmica -->
+            <div class="card formula-card">
+                <h3 id="formula-title">Fórmula do Cálculo (Capitalização Mensal)</h3>
+                <div class="formula-base">
+                    FV = PV × (1 + r)<sup>n</sup> + PMT × [ ((1 + r)<sup>n</sup> - 1) / r ]
+                </div>
+                <div class="formula-replaced" id="formula-dynamic"></div>
+            </div>
+
+            <div class="results-grid">
+                <div class="card result-card highlight-invested">
+                    <span class="card-title" id="title-inv">Total Investido</span>
+                    <strong id="inv">0,00</strong>
+                </div>
+                <div class="card result-card highlight-interest">
+                    <span class="card-title" id="title-int">Total em Juros</span>
+                    <strong id="int">0,00</strong>
+                </div>
+                <div class="card result-card highlight-total">
+                    <span class="card-title" id="title-fv">Patrimônio Total (FV)</span>
+                    <strong id="fv">0,00</strong>
+                </div>
+            </div>
+            
+            <!-- Bloco do Gráfico -->
+            <div class="card chart-card">
+                <div id="chart"></div>
+            </div>
+        </main>
+
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
