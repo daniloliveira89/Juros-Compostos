@@ -100,7 +100,6 @@ function calc() {
     const cfg = combinedConfigs[currentCurr];
     const t = translations[cfg.lang];
 
-    // Traduz dinamicamente a interface de texto
     getEl("title-sim").textContent = t.titleSim;
     getEl("lbl-curr").textContent = t.lblCurr; 
     getEl("lbl-pv").textContent = t.lblPv;
@@ -191,16 +190,15 @@ function calc() {
     intEl.textContent = formatMoney(finalNetInterest);
 
     formulaDynamic.innerHTML = `
-        <div style="font-size: 0.8rem; font-family: 'Inter', sans-serif; color: #64748b; margin-bottom: 10px;">
+        <div style="font-size: 0.8rem; font-family: 'Inter', sans-serif; color: #94a3b8; margin-bottom: 10px;">
             ${t.equivText(rAnnual, (r * 100).toFixed(2), years, n)} &bull; Inflação: ${cfg.inflation}% a.a. &bull; IR Retido: ${(finalIrRate * 100).toFixed(1)}%
         </div>
         FV = ${formatMoney(pv)} × (1 + ${r.toFixed(4)})<sup>${n}</sup> + ${formatMoney(pmt)} × [ ((1 + ${r.toFixed(4)})<sup>${n}</sup> - 1) / ${r.toFixed(4)} ]
         <div style="margin-top: 10px;">
-            <strong>FV Bruto = <span>${formatMoney(bal)}</span> &nbsp;|&nbsp; <span class="math-highlight">FV Líquido = ${formatMoney(finalNetBal)}</span></strong>
+            <strong>FV Bruto = <span style="color: #cbd5e1;">${formatMoney(bal)}</span> &nbsp;|&nbsp; <span class="math-highlight">FV Líquido = ${formatMoney(finalNetBal)}</span></strong>
         </div>
     `;
 
-    // Configuração dos Marcos Verticais (Halvings)
     const targetDates = [{ m: 3, y: 2028 }, { m: 3, y: 2032 }, { m: 3, y: 2036 }];
     const shapes = [];
     const annotations = [];
@@ -218,35 +216,34 @@ function calc() {
 
                 shapes.push({
                     type: 'line', x0: targetLabel, y0: 0, x1: targetLabel, y1: 1, yref: 'paper',
-                    line: { color: '#94a3b8', width: 1.5, dash: 'dash' }
+                    line: { color: '#64748b', width: 1.5, dash: 'dash' }
                 });
 
                 annotations.push({
                     x: targetLabel, y: 1.02, yref: 'paper', text: `${monthNames[cfg.lang][target.m]} ${target.y}`,
                     showarrow: false, xanchor: 'center', yanchor: 'bottom',
-                    font: { family: 'Inter, sans-serif', size: 10, color: '#475569', weight: 'bold' },
-                    bgcolor: 'rgba(248, 250, 252, 0.95)', bordercolor: '#cbd5e1', borderwidth: 1, borderpad: 4
+                    font: { family: 'Inter, sans-serif', size: 10, color: '#e2e8f0', weight: 'bold' },
+                    bgcolor: 'rgba(30, 41, 59, 0.95)', bordercolor: '#475569', borderwidth: 1, borderpad: 4
                 });
             }
         });
     }
 
-    // Arrays de Camadas Visuais
     const visualTraces = [];
     
     const traceInvestedVisual = {
         x: xLabels, y: yInvested, type: 'scatter', mode: 'lines',
-        fill: 'tozeroy', fillcolor: 'rgba(37, 99, 235, 0.12)',
-        line: { color: '#2563eb', width: 2.5 }, hoverinfo: 'skip', showlegend: false
+        fill: 'tozeroy', fillcolor: 'rgba(59, 130, 246, 0.16)',
+        line: { color: '#3b82f6', width: 2.5 }, hoverinfo: 'skip', showlegend: false
     };
     const traceInterestVisual = {
         x: xLabels, y: yTotalNet, type: 'scatter', mode: 'lines',
-        fill: 'tonexty', fillcolor: 'rgba(16, 185, 129, 0.18)',
+        fill: 'tonexty', fillcolor: 'rgba(16, 185, 129, 0.22)',
         line: { color: '#10b981', width: 2.5 }, hoverinfo: 'skip', showlegend: false
     };
     const traceRealVisual = {
         x: xLabels, y: yRealValue, type: 'scatter', mode: 'lines',
-        line: { color: '#ef4444', width: 2.5, dash: 'dash' }, hoverinfo: 'skip', showlegend: false
+        line: { color: '#f87171', width: 2.5, dash: 'dash' }, hoverinfo: 'skip', showlegend: false
     };
 
     visualTraces.push(traceInvestedVisual, traceInterestVisual, traceRealVisual);
@@ -264,15 +261,14 @@ function calc() {
         });
     }
 
-    // Arrays de Interação (Hover e Legenda)
     const traceInvestedHover = {
         x: xLabels, y: yInvested, name: t.chartInv, type: 'scatter', mode: 'lines',
-        line: { color: '#2563eb', width: 2.5 }, text: yInvested.map(v => formatMoneyNoCents(v)),
+        line: { color: '#3b82f6', width: 2.5 }, text: yInvested.map(v => formatMoneyNoCents(v)),
         hovertemplate: '%{text}<extra></extra>', showlegend: true
     };
     const traceRealHover = {
         x: xLabels, y: yRealValue, name: t.chartReal, type: 'scatter', mode: 'lines',
-        line: { color: '#ef4444', width: 2.5, dash: 'dash' }, text: yRealValue.map(v => formatMoneyNoCents(v)),
+        line: { color: '#f87171', width: 2.5, dash: 'dash' }, text: yRealValue.map(v => formatMoneyNoCents(v)),
         hovertemplate: '%{text}<extra></extra>', showlegend: true
     };
     const traceInterestHover = {
@@ -306,29 +302,29 @@ function calc() {
     if (btcCheck.checked) {
         interactionTraces.push({
             x: [null], y: [null], name: t.halvingLegend, type: 'scatter', mode: 'lines',
-            line: { color: '#94a3b8', width: 1.5, dash: 'dash' }, showlegend: true, hoverinfo: 'skip'
+            line: { color: '#64748b', width: 1.5, dash: 'dash' }, showlegend: true, hoverinfo: 'skip'
         });
     }
 
     const layout = {
-        font: { family: 'Inter, system-ui, sans-serif', color: '#475569' },
+        font: { family: 'Inter, system-ui, sans-serif', color: '#94a3b8' },
         margin: { t: 40, b: 80, l: 75, r: 20 },
         hovermode: 'x unified',
         hoverlabel: {
-            bgcolor: 'rgba(255, 255, 255, 0.96)',
-            bordercolor: '#e2e8f0',
-            font: { family: 'JetBrains Mono, monospace', size: 12, color: '#0f172a' }
+            bgcolor: 'rgba(15, 23, 42, 0.96)',
+            bordercolor: '#334155',
+            font: { family: 'JetBrains Mono, monospace', size: 12, color: '#f8fafc' }
         },
-        legend: { orientation: 'h', y: -0.26, x: 0.5, xanchor: 'center', font: { size: 12 } },
-        xaxis: { showgrid: false, tickfont: { size: 11, color: '#64748b' } },
+        legend: { orientation: 'h', y: -0.26, x: 0.5, xanchor: 'center', font: { size: 12, color: '#cbd5e1' } },
+        xaxis: { showgrid: false, tickfont: { size: 11, color: '#94a3b8' } },
         yaxis: { 
-            gridcolor: '#f1f5f9', 
-            zerolinecolor: '#e2e8f0',
-            title: { text: `${t.axisY} (${currentCurr})`, font: { size: 12, weight: 'bold' } },
-            tickfont: { family: 'JetBrains Mono, monospace', size: 11, color: '#64748b' },
+            gridcolor: '#1e293b', 
+            zerolinecolor: '#334155',
+            title: { text: `${t.axisY} (${currentCurr})`, font: { size: 12, weight: 'bold', color: '#cbd5e1' } },
+            tickfont: { family: 'JetBrains Mono, monospace', size: 11, color: '#94a3b8' },
             dtick: btcCheck.checked ? 50000 : 25000 
         },
-        plot_bgcolor: '#ffffff', paper_bgcolor: '#ffffff',
+        plot_bgcolor: '#111827', paper_bgcolor: '#111827',
         shapes: shapes, annotations: annotations
     };
 
