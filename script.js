@@ -191,12 +191,13 @@ function calc() {
     intEl.textContent = formatMoney(finalNetInterest);
 
     formulaDynamic.innerHTML = `
-        <div style="font-size: 0.85rem; color: #64748b; margin-bottom: 8px;">
-            ${t.equivText(rAnnual, (r * 100).toFixed(2), years, n)} | Inflação: ${cfg.inflation}% a.a. | IR Retido: ${(finalIrRate * 100).toFixed(1)}%
+        <div style="font-size: 0.8rem; font-family: 'Inter', sans-serif; color: #64748b; margin-bottom: 10px;">
+            ${t.equivText(rAnnual, (r * 100).toFixed(2), years, n)} &bull; Inflação: ${cfg.inflation}% a.a. &bull; IR Retido: ${(finalIrRate * 100).toFixed(1)}%
         </div>
         FV = ${formatMoney(pv)} × (1 + ${r.toFixed(4)})<sup>${n}</sup> + ${formatMoney(pmt)} × [ ((1 + ${r.toFixed(4)})<sup>${n}</sup> - 1) / ${r.toFixed(4)} ]
-        <br><br>
-        <strong>FV Bruto = <span>${formatMoney(bal)}</span> | <span class="math-highlight">FV Líquido = ${formatMoney(finalNetBal)}</span></strong>
+        <div style="margin-top: 10px;">
+            <strong>FV Bruto = <span>${formatMoney(bal)}</span> &nbsp;|&nbsp; <span class="math-highlight">FV Líquido = ${formatMoney(finalNetBal)}</span></strong>
+        </div>
     `;
 
     // Configuração dos Marcos Verticais (Halvings)
@@ -223,8 +224,8 @@ function calc() {
                 annotations.push({
                     x: targetLabel, y: 1.02, yref: 'paper', text: `${monthNames[cfg.lang][target.m]} ${target.y}`,
                     showarrow: false, xanchor: 'center', yanchor: 'bottom',
-                    font: { size: 10, color: '#475569', weight: 'bold' },
-                    bgcolor: 'rgba(255, 255, 255, 0.9)', bordercolor: '#cbd5e1', borderwidth: 1, borderpad: 3
+                    font: { family: 'Inter, sans-serif', size: 10, color: '#475569', weight: 'bold' },
+                    bgcolor: 'rgba(248, 250, 252, 0.95)', bordercolor: '#cbd5e1', borderwidth: 1, borderpad: 4
                 });
             }
         });
@@ -235,17 +236,17 @@ function calc() {
     
     const traceInvestedVisual = {
         x: xLabels, y: yInvested, type: 'scatter', mode: 'lines',
-        fill: 'tozeroy', fillcolor: 'rgba(59, 130, 246, 0.15)',
-        line: { color: '#3b82f6', width: 2.5 }, hoverinfo: 'skip', showlegend: false
+        fill: 'tozeroy', fillcolor: 'rgba(37, 99, 235, 0.12)',
+        line: { color: '#2563eb', width: 2.5 }, hoverinfo: 'skip', showlegend: false
     };
     const traceInterestVisual = {
         x: xLabels, y: yTotalNet, type: 'scatter', mode: 'lines',
-        fill: 'tonexty', fillcolor: 'rgba(16, 185, 129, 0.2)',
+        fill: 'tonexty', fillcolor: 'rgba(16, 185, 129, 0.18)',
         line: { color: '#10b981', width: 2.5 }, hoverinfo: 'skip', showlegend: false
     };
     const traceRealVisual = {
         x: xLabels, y: yRealValue, type: 'scatter', mode: 'lines',
-        line: { color: '#ef4444', width: 3, dash: 'dash' }, hoverinfo: 'skip', showlegend: false
+        line: { color: '#ef4444', width: 2.5, dash: 'dash' }, hoverinfo: 'skip', showlegend: false
     };
 
     visualTraces.push(traceInvestedVisual, traceInterestVisual, traceRealVisual);
@@ -266,12 +267,12 @@ function calc() {
     // Arrays de Interação (Hover e Legenda)
     const traceInvestedHover = {
         x: xLabels, y: yInvested, name: t.chartInv, type: 'scatter', mode: 'lines',
-        line: { color: '#3b82f6', width: 2.5 }, text: yInvested.map(v => formatMoneyNoCents(v)),
+        line: { color: '#2563eb', width: 2.5 }, text: yInvested.map(v => formatMoneyNoCents(v)),
         hovertemplate: '%{text}<extra></extra>', showlegend: true
     };
     const traceRealHover = {
         x: xLabels, y: yRealValue, name: t.chartReal, type: 'scatter', mode: 'lines',
-        line: { color: '#ef4444', width: 3, dash: 'dash' }, text: yRealValue.map(v => formatMoneyNoCents(v)),
+        line: { color: '#ef4444', width: 2.5, dash: 'dash' }, text: yRealValue.map(v => formatMoneyNoCents(v)),
         hovertemplate: '%{text}<extra></extra>', showlegend: true
     };
     const traceInterestHover = {
@@ -310,13 +311,21 @@ function calc() {
     }
 
     const layout = {
-        margin: { t: 40, b: 80, l: 70, r: 20 },
+        font: { family: 'Inter, system-ui, sans-serif', color: '#475569' },
+        margin: { t: 40, b: 80, l: 75, r: 20 },
         hovermode: 'x unified',
-        legend: { orientation: 'h', y: -0.28, x: 0.5, xanchor: 'center' },
-        xaxis: { showgrid: false },
+        hoverlabel: {
+            bgcolor: 'rgba(255, 255, 255, 0.96)',
+            bordercolor: '#e2e8f0',
+            font: { family: 'JetBrains Mono, monospace', size: 12, color: '#0f172a' }
+        },
+        legend: { orientation: 'h', y: -0.26, x: 0.5, xanchor: 'center', font: { size: 12 } },
+        xaxis: { showgrid: false, tickfont: { size: 11, color: '#64748b' } },
         yaxis: { 
             gridcolor: '#f1f5f9', 
-            title: `${t.axisY} (${currentCurr})`,
+            zerolinecolor: '#e2e8f0',
+            title: { text: `${t.axisY} (${currentCurr})`, font: { size: 12, weight: 'bold' } },
+            tickfont: { family: 'JetBrains Mono, monospace', size: 11, color: '#64748b' },
             dtick: btcCheck.checked ? 50000 : 25000 
         },
         plot_bgcolor: '#ffffff', paper_bgcolor: '#ffffff',
