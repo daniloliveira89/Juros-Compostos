@@ -1,20 +1,20 @@
 :root {
-    --bg-global: #f1f5f9;
-    --bg-card: #ffffff;
-    --bg-subtle: #f8fafc;
-    --text-main: #0f172a;
-    --text-muted: #64748b;
-    --border: #e2e8f0;
-    --border-focus: #93c5fd;
-    --primary: #2563eb;
-    --primary-soft: rgba(37, 99, 235, 0.08);
-    --success: #059669;
-    --success-soft: rgba(5, 150, 105, 0.08);
+    --bg-global: #0b0f19;
+    --bg-card: #111827;
+    --bg-subtle: #1e293b;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --border: #1e293b;
+    --border-light: #334155;
+    --primary: #3b82f6;
+    --primary-soft: rgba(59, 130, 246, 0.12);
+    --success: #10b981;
+    --success-soft: rgba(16, 185, 129, 0.14);
     --gold: #eab308;
     --btc: #f7931a;
-    --shadow-sm: 0 1px 2px 0 rgba(15, 23, 42, 0.04);
-    --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.05), 0 2px 4px -2px rgba(15, 23, 42, 0.03);
-    --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.06), 0 4px 6px -4px rgba(15, 23, 42, 0.04);
+    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 4px 10px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -2px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 12px 20px -3px rgba(0, 0, 0, 0.6), 0 4px 6px -4px rgba(0, 0, 0, 0.5);
     --radius-lg: 16px;
     --radius-md: 10px;
 }
@@ -28,8 +28,8 @@
 body {
     font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     background-color: var(--bg-global);
-    background-image: radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.04) 0px, transparent 50%),
-                      radial-gradient(at 100% 0%, rgba(16, 185, 129, 0.04) 0px, transparent 50%);
+    background-image: radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.08) 0px, transparent 50%),
+                      radial-gradient(at 100% 0%, rgba(16, 185, 129, 0.06) 0px, transparent 50%);
     color: var(--text-main);
     padding: 16px 24px 32px 24px;
     min-height: 100vh;
@@ -39,7 +39,6 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-/* Barra Superior */
 .top-bar {
     width: 100%;
     max-width: 1240px;
@@ -55,13 +54,13 @@ body {
     background: var(--bg-card);
     padding: 6px 14px;
     border-radius: 999px;
-    border: 1px solid var(--border);
+    border: 1px solid var(--border-light);
     box-shadow: var(--shadow-sm);
     transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .currency-switcher:hover {
-    border-color: #cbd5e1;
+    border-color: #475569;
     box-shadow: var(--shadow-md);
 }
 
@@ -87,13 +86,17 @@ body {
     transition: all 0.15s ease;
 }
 
-.currency-switcher select:hover,
-.currency-switcher select:focus {
-    background: #eef2ff;
-    color: var(--primary);
+.currency-switcher select option {
+    background: var(--bg-card);
+    color: var(--text-main);
 }
 
-/* Grid Principal */
+.currency-switcher select:hover,
+.currency-switcher select:focus {
+    background: #334155;
+    color: #60a5fa;
+}
+
 .dashboard-container {
     display: grid;
     grid-template-columns: 1fr;
@@ -113,26 +116,25 @@ body {
     }
 }
 
-/* Estrutura Base dos Cards */
 .card {
     background: var(--bg-card);
     border-radius: var(--radius-lg);
     padding: 24px;
     box-shadow: var(--shadow-md);
-    border: 1px solid rgba(226, 232, 240, 0.9);
+    border: 1px solid var(--border-light);
 }
 
-/* Sidebar */
 .sidebar h2 {
     font-size: 1.15rem;
     font-weight: 700;
     letter-spacing: -0.02em;
     margin-bottom: 22px;
     padding-bottom: 14px;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--border-light);
     display: flex;
     align-items: center;
     gap: 8px;
+    color: var(--text-main);
 }
 
 .sidebar h2::before {
@@ -141,7 +143,7 @@ body {
     width: 8px;
     height: 18px;
     border-radius: 4px;
-    background: linear-gradient(180deg, var(--primary), #60a5fa);
+    background: linear-gradient(180deg, var(--primary), #10b981);
 }
 
 .input-group {
@@ -159,34 +161,32 @@ body {
 .input-group input {
     width: 100%;
     padding: 11px 14px;
-    border: 1px solid var(--border);
+    border: 1px solid var(--border-light);
     border-radius: var(--radius-md);
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.95rem;
     font-weight: 500;
     font-variant-numeric: tabular-nums;
     outline: none;
-    background-color: var(--bg-subtle);
+    background-color: #0b0f19;
     color: var(--text-main);
     transition: all 0.2s ease;
 }
 
 .input-group input:hover {
-    border-color: #cbd5e1;
-    background-color: #ffffff;
+    border-color: #475569;
 }
 
 .input-group input:focus {
-    background-color: #ffffff;
+    background-color: #0f172a;
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
 }
 
-/* Toggles Modernos (Switch Style) */
 .toggle-group {
     margin-top: auto;
     padding-top: 20px;
-    border-top: 1px solid var(--border);
+    border-top: 1px solid var(--border-light);
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -204,8 +204,8 @@ body {
     justify-content: space-between;
     flex-direction: row-reverse;
     padding: 10px 12px;
-    background: var(--bg-subtle);
-    border: 1px solid var(--border);
+    background: #0b0f19;
+    border: 1px solid var(--border-light);
     border-radius: var(--radius-md);
     font-size: 0.875rem;
     font-weight: 600;
@@ -216,8 +216,8 @@ body {
 }
 
 .checkbox-label:hover {
-    border-color: #cbd5e1;
-    background: #ffffff;
+    border-color: #475569;
+    background: #131c2e;
 }
 
 .checkbox-label input[type="checkbox"] {
@@ -225,7 +225,7 @@ body {
     -webkit-appearance: none;
     width: 38px;
     height: 22px;
-    background: #cbd5e1;
+    background: #334155;
     border-radius: 999px;
     position: relative;
     cursor: pointer;
@@ -241,9 +241,9 @@ body {
     left: 3px;
     width: 16px;
     height: 16px;
-    background: #ffffff;
+    background: #f8fafc;
     border-radius: 50%;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
     transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -265,12 +265,11 @@ body {
     line-height: 1.45;
     margin-top: 4px;
     padding: 10px 12px;
-    background: var(--bg-subtle);
+    background: #0b0f19;
     border-radius: 8px;
-    border-left: 3px solid #cbd5e1;
+    border-left: 3px solid #475569;
 }
 
-/* Conteúdo Principal */
 .main-content {
     display: flex;
     flex-direction: column;
@@ -278,10 +277,9 @@ body {
     min-width: 0;
 }
 
-/* Card da Fórmula */
 .formula-card {
     padding: 20px 24px;
-    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+    background: linear-gradient(180deg, #111827 0%, #0f172a 100%);
 }
 
 .formula-card h3 {
@@ -297,9 +295,9 @@ body {
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.95rem;
     font-weight: 600;
-    color: var(--primary);
+    color: #60a5fa;
     background: var(--primary-soft);
-    border: 1px solid rgba(37, 99, 235, 0.15);
+    border: 1px solid rgba(59, 130, 246, 0.25);
     padding: 12px 16px;
     border-radius: var(--radius-md);
     text-align: center;
@@ -311,22 +309,22 @@ body {
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.875rem;
     line-height: 1.6;
-    color: var(--text-main);
+    color: #e2e8f0;
     text-align: center;
-    border-top: 1px dashed var(--border);
+    border-top: 1px dashed var(--border-light);
     padding-top: 14px;
     overflow-x: auto;
 }
 
 .formula-replaced .math-highlight {
-    color: var(--success);
+    color: #34d399;
     background: var(--success-soft);
+    border: 1px solid rgba(16, 185, 129, 0.25);
     padding: 2px 8px;
     border-radius: 6px;
     font-weight: 700;
 }
 
-/* Cards de Resultados */
 .results-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -367,7 +365,7 @@ body {
 }
 
 .highlight-total::before {
-    background: linear-gradient(90deg, #059669, #10b981);
+    background: linear-gradient(90deg, #059669, #34d399);
 }
 
 .card-title {
@@ -386,15 +384,14 @@ body {
 }
 
 .highlight-invested strong {
-    color: var(--primary);
+    color: #60a5fa;
 }
 
 .highlight-interest strong,
 .highlight-total strong {
-    color: var(--success);
+    color: #34d399;
 }
 
-/* Card do Gráfico */
 .chart-card {
     min-height: 520px;
     padding: 16px 20px;
