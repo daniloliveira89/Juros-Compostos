@@ -1,0 +1,34 @@
+AUDITORIA TÉCNICA — Juros-Compostos
+Data: 14/11/2026 (America/Sao_Paulo)
+Repositório: https://github.com/daniloliveira89/Juros-Compostos
+Branch examinada: main
+Commit examinado: a5d0c72c16f99de93d29b8d7e1573faf411e1222
+Escopo: revisão dos fluxos principais. Somente AUDITORIA.txt é acrescentado; nenhuma melhoria foi aplicada ao projeto.
+Método e limites: Leitura dos três arquivos de texto. Foram executadas reproduções do script original em Node 24.21.0 com DOM e Plotly simulados, sem rede: taxa negativa e prazo fracionário. Não houve auditoria tributária ou verificação de taxas de mercado; os apontamentos são sobre comportamento matemático e clareza do modelo.
+Prioridades: P1 = alta; P2 = média; P3 = baixa. Ordem sugerida de aplicação:
+
+1. [P1] Preservar perdas no cálculo do saldo final
+Evidência: script.js:161-168,196-203
+Constatação e impacto: O saldo líquido é reconstruído como capital investido + Math.max(0, rendimento) após o desconto. Rendimentos negativos são zerados e o capital inicial reaparece integralmente. Reprodução: PV=1.000, PMT=0, taxa=-12% a.a., prazo=1 ano produz FV=1.000; pelo próprio regime mensal adotado, o saldo bruto é aproximadamente 886,38.
+Melhoria sugerida: Calcular o saldo a partir do patrimônio bruto efetivo e descontar apenas os tributos aplicáveis sobre ganhos positivos, sem apagar perdas. Ou rejeitar claramente taxas negativas se estiverem fora do modelo.
+Como validar depois: O cenário reproduzido mostra a perda correspondente ao modelo escolhido; taxa zero, ganho positivo e aportes continuam consistentes com a série mensal.
+
+2. [P2] Converter o prazo para um número definido de meses
+Evidência: script.js:132-143,149-187,196-203; index.html:48
+Constatação e impacto: n = years*12 pode ser fracionário, mas o loop usa i inteiro e faz aportes enquanto i<n. O total investido usa pmt*n. Reprodução: PV=0, PMT=100, taxa=0 e prazo=0,1 ano retorna investido=120 e juros=62, embora a taxa seja zero.
+Melhoria sugerida: Definir a política para fração de mês: aceitar meses inteiros ou explicitar arredondamento/proporção. Usar a mesma quantidade de períodos em aportes, séries, totais e índices do gráfico.
+Como validar depois: Com taxa zero, o rendimento é sempre zero e o saldo coincide com os aportes. Prazos fracionários seguem a regra apresentada ao usuário.
+
+3. [P2] Validar limites antes de construir as séries do gráfico
+Evidência: script.js:110-111,143,149-150; index.html:36-48
+Constatação e impacto: Os campos numéricos não têm limites de domínio e calc converte valores diretamente, sem testar finitude ou um máximo de períodos. Valores negativos ou muito grandes podem gerar totais inválidos e loops/séries que bloqueiam a página.
+Melhoria sugerida: Validar valores finitos, domínio de aportes/prazo e um limite razoável de pontos. Exibir erro junto ao campo e preservar a última simulação válida. Reutilizar o gráfico quando possível em vez de recriá-lo a cada digitação.
+Como validar depois: Entradas vazias, negativas fora do domínio, infinitas e prazos excessivos geram mensagens úteis sem bloquear a interface ou exibir valores enganosos.
+
+4. [P2] Explicitar as hipóteses das comparações e das taxas
+Evidência: script.js:23-30,102-107,140-142,170-185,210-215
+Constatação e impacto: A taxa anual é dividida por 12 e chamada de equivalência mensal; ouro, inflação e Bitcoin usam percentuais fixos e os cenários não recebem o mesmo tratamento de desconto do cenário principal. Isso dificulta entender o que é hipótese nominal, projeção e valor líquido.
+Melhoria sugerida: Identificar taxa nominal versus efetiva e permitir a escolha do regime quando necessário. Mostrar as hipóteses de cada curva e manter uma base de comparação consistente, distinguindo bruto, líquido e correção de poder de compra. Validar regras tributárias separadamente antes de apresentá-las como cálculo fiel a um produto.
+Como validar depois: Uma taxa anual efetiva e uma nominal geram os valores esperados para cada regime, e os rótulos deixam claro quais curvas são cenários hipotéticos e quais descontos cada uma inclui.
+
+As referências pertencem ao commit examinado. Os testes sugeridos ainda não foram implementados. Esta revisão não atesta ausência de outros problemas nem valida a atualidade de informações externas.
